@@ -580,171 +580,182 @@ def server_error(error):
     return render_template("errors/500.html"), 500
 
 
-# If we have an empty database, load initial data
-with app.app_context():
-    # Load seed data for Venues if there are no Venues at startup
-    if db.session.query(Venue).count() == 0:
-        print("\n\n\n\nDatabase contains no Venues - loading seed data . . .\n\n\n")
-        seed_venues_data = [
-            {
-                "name": "The Musical Hop",
-                "genres": ["Jazz", "Reggae", "Swing", "Classical", "Folk"],
-                "address": "1015 Folsom Street",
-                "city": "San Francisco",
-                "state": "CA",
-                "phone": "321-323-1234",
-                "website": "https://www.themusicalhop.com",
-                "facebook_link": "https://www.facebook.com/TheMusicalHop",
-                "seeking_talent": True,
-                "seeking_description": "We are on the lookout for a local artist to play every two weeks. Please call us.",
-                "image_link": "https://images.unsplash.com/photo-1543900694-133f37abaaa5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60",
-            },
-            {
-                "name": "The Dueling Pianos Bar",
-                "genres": ["Classical", "R&B", "Hip-Hop"],
-                "address": "335 Delancey Street",
-                "city": "New York",
-                "state": "NY",
-                "phone": "914-203-1132",
-                "website": "https://www.theduelingpianos.com",
-                "facebook_link": "https://www.facebook.com/theduelingpianos",
-                "seeking_talent": False,
-                "image_link": "https://images.unsplash.com/photo-1497032205916-ac775f0649ae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
-            },
-            {
-                "name": "Park Square Live Music & Coffee",
-                "genres": ["Rock n Roll", "Jazz", "Classical", "Folk"],
-                "address": "34 Whiskey Moore Ave",
-                "city": "San Francisco",
-                "state": "CA",
-                "phone": "415-386-1234",
-                "website": "https://www.parksquarelivemusicandcoffee.com",
-                "facebook_link": "https://www.facebook.com/ParkSquareLiveMusicAndCoffee",
-                "seeking_talent": False,
-                "image_link": "https://images.unsplash.com/photo-1485686531765-ba63b07845a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=747&q=80",
-            },
-        ]
-        for next_venue_data in seed_venues_data:
-            new_venue = Venue()
-            new_venue.name = next_venue_data["name"]
-            new_venue.city = next_venue_data["city"]
-            new_venue.state = next_venue_data["state"]
-            new_venue.address = next_venue_data["address"]
-            if "phone" in next_venue_data:
-                new_venue.phone = next_venue_data["phone"]
-            new_venue.genres = next_venue_data["genres"]
-            if "website" in next_venue_data:
-                new_venue.website = next_venue_data["website"]
-            if "facebook_link" in next_venue_data:
-                new_venue.facebook_link = next_venue_data["facebook_link"]
-            new_venue.seeking_talent = next_venue_data["seeking_talent"]
-            if new_venue.seeking_talent:
-                if "seeking_description" in next_venue_data:
-                    new_venue.seeking_description = next_venue_data["seeking_description"]
-            if "image_link" in next_venue_data:
-                new_venue.image_link = next_venue_data["image_link"]
+def load_seed_data_if_needed():
+    # If we have an empty database, load initial data
+    with app.app_context():
+        # Load seed data for Venues if there are no Venues at startup
+        if db.session.query(Venue).count() == 0:
+            print("")
+            print("*" * 80)
+            print("Database contains no Venues - loading seed data . . .")
+            print("*" * 80)
+            seed_venues_data = [
+                {
+                    "name": "The Musical Hop",
+                    "genres": ["Jazz", "Reggae", "Swing", "Classical", "Folk"],
+                    "address": "1015 Folsom Street",
+                    "city": "San Francisco",
+                    "state": "CA",
+                    "phone": "321-323-1234",
+                    "website": "https://www.themusicalhop.com",
+                    "facebook_link": "https://www.facebook.com/TheMusicalHop",
+                    "seeking_talent": True,
+                    "seeking_description": "We are on the lookout for a local artist to play every two weeks. Please call us.",
+                    "image_link": "https://images.unsplash.com/photo-1543900694-133f37abaaa5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60",
+                },
+                {
+                    "name": "The Dueling Pianos Bar",
+                    "genres": ["Classical", "R&B", "Hip-Hop"],
+                    "address": "335 Delancey Street",
+                    "city": "New York",
+                    "state": "NY",
+                    "phone": "914-203-1132",
+                    "website": "https://www.theduelingpianos.com",
+                    "facebook_link": "https://www.facebook.com/theduelingpianos",
+                    "seeking_talent": False,
+                    "image_link": "https://images.unsplash.com/photo-1497032205916-ac775f0649ae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
+                },
+                {
+                    "name": "Park Square Live Music & Coffee",
+                    "genres": ["Rock n Roll", "Jazz", "Classical", "Folk"],
+                    "address": "34 Whiskey Moore Ave",
+                    "city": "San Francisco",
+                    "state": "CA",
+                    "phone": "415-386-1234",
+                    "website": "https://www.parksquarelivemusicandcoffee.com",
+                    "facebook_link": "https://www.facebook.com/ParkSquareLiveMusicAndCoffee",
+                    "seeking_talent": False,
+                    "image_link": "https://images.unsplash.com/photo-1485686531765-ba63b07845a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=747&q=80",
+                },
+            ]
+            for next_venue_data in seed_venues_data:
+                new_venue = Venue()
+                new_venue.name = next_venue_data["name"]
+                new_venue.city = next_venue_data["city"]
+                new_venue.state = next_venue_data["state"]
+                new_venue.address = next_venue_data["address"]
+                if "phone" in next_venue_data:
+                    new_venue.phone = next_venue_data["phone"]
+                new_venue.genres = next_venue_data["genres"]
+                if "website" in next_venue_data:
+                    new_venue.website = next_venue_data["website"]
+                if "facebook_link" in next_venue_data:
+                    new_venue.facebook_link = next_venue_data["facebook_link"]
+                new_venue.seeking_talent = next_venue_data["seeking_talent"]
+                if new_venue.seeking_talent:
+                    if "seeking_description" in next_venue_data:
+                        new_venue.seeking_description = next_venue_data["seeking_description"]
+                if "image_link" in next_venue_data:
+                    new_venue.image_link = next_venue_data["image_link"]
 
-            db.session.add(new_venue)
-            db.session.commit()
+                db.session.add(new_venue)
+                db.session.commit()
 
-    # Load seed data for Artists if there are no Artists at startup
-    if db.session.query(Artist).count() == 0:
-        print("\n\n\n\nDatabase contains no Artists - loading seed data . . .\n\n\n")
-        seed_artists_data = [
-            {
-                "name": "Guns N Petals",
-                "genres": ["Rock n Roll"],
-                "city": "San Francisco",
-                "state": "CA",
-                "phone": "326-223-5000",
-                "website": "https://www.gunsnpetalsband.com",
-                "facebook_link": "https://www.facebook.com/GunsNPetals",
-                "seeking_venue": True,
-                "seeking_description": "Looking for shows to perform at in the San Francisco Bay Area!",
-                "image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
-            },
-            {
-                "name": "Matt Quevedo",
-                "genres": ["Jazz"],
-                "city": "New York",
-                "state": "NY",
-                "phone": "300-400-5000",
-                "facebook_link": "https://www.facebook.com/mattquevedo923251523",
-                "seeking_venue": False,
-                "image_link": "https://images.unsplash.com/photo-1495223153807-b916f75de8c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80",
-            },
-            {
-                "name": "The Wild Sax Band",
-                "genres": ["Jazz", "Classical"],
-                "city": "San Francisco",
-                "state": "CA",
-                "phone": "432-325-5432",
-                "seeking_venue": False,
-                "image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
-            },
-        ]
+        # Load seed data for Artists if there are no Artists at startup
+        if db.session.query(Artist).count() == 0:
+            print("")
+            print("*" * 80)
+            print("Database contains no Artists - loading seed data . . .")
+            print("*" * 80)
+            seed_artists_data = [
+                {
+                    "name": "Guns N Petals",
+                    "genres": ["Rock n Roll"],
+                    "city": "San Francisco",
+                    "state": "CA",
+                    "phone": "326-223-5000",
+                    "website": "https://www.gunsnpetalsband.com",
+                    "facebook_link": "https://www.facebook.com/GunsNPetals",
+                    "seeking_venue": True,
+                    "seeking_description": "Looking for shows to perform at in the San Francisco Bay Area!",
+                    "image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
+                },
+                {
+                    "name": "Matt Quevedo",
+                    "genres": ["Jazz"],
+                    "city": "New York",
+                    "state": "NY",
+                    "phone": "300-400-5000",
+                    "facebook_link": "https://www.facebook.com/mattquevedo923251523",
+                    "seeking_venue": False,
+                    "image_link": "https://images.unsplash.com/photo-1495223153807-b916f75de8c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80",
+                },
+                {
+                    "name": "The Wild Sax Band",
+                    "genres": ["Jazz", "Classical"],
+                    "city": "San Francisco",
+                    "state": "CA",
+                    "phone": "432-325-5432",
+                    "seeking_venue": False,
+                    "image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
+                },
+            ]
 
-        for next_artist_data in seed_artists_data:
-            new_artist = Artist()
-            new_artist.name = next_artist_data["name"]
-            new_artist.city = next_artist_data["city"]
-            new_artist.state = next_artist_data["state"]
-            if "phone" in next_artist_data:
-                new_artist.phone = next_artist_data["phone"]
-            new_artist.genres = next_artist_data["genres"]
-            if "website" in next_artist_data:
-                new_artist.website = next_artist_data["website"]
-            if "facebook_link" in next_artist_data:
-                new_artist.facebook_link = next_artist_data["facebook_link"]
-            new_artist.seeking_venue = next_artist_data["seeking_venue"]
-            if new_artist.seeking_venue:
-                if "seeking_description" in next_artist_data:
-                    new_artist.seeking_description = next_artist_data["seeking_description"]
-            if "image_link" in next_artist_data:
-                new_artist.image_link = next_artist_data["image_link"]
+            for next_artist_data in seed_artists_data:
+                new_artist = Artist()
+                new_artist.name = next_artist_data["name"]
+                new_artist.city = next_artist_data["city"]
+                new_artist.state = next_artist_data["state"]
+                if "phone" in next_artist_data:
+                    new_artist.phone = next_artist_data["phone"]
+                new_artist.genres = next_artist_data["genres"]
+                if "website" in next_artist_data:
+                    new_artist.website = next_artist_data["website"]
+                if "facebook_link" in next_artist_data:
+                    new_artist.facebook_link = next_artist_data["facebook_link"]
+                new_artist.seeking_venue = next_artist_data["seeking_venue"]
+                if new_artist.seeking_venue:
+                    if "seeking_description" in next_artist_data:
+                        new_artist.seeking_description = next_artist_data["seeking_description"]
+                if "image_link" in next_artist_data:
+                    new_artist.image_link = next_artist_data["image_link"]
 
-            db.session.add(new_artist)
-            db.session.commit()
+                db.session.add(new_artist)
+                db.session.commit()
 
-    if db.session.query(Show).count() == 0:
-        print("\n\n\n\nDatabase contains no Shows - loading seed data . . .\n\n\n")
-        seed_show_data = [
-            {
-                "venue_name": "The Musical Hop",
-                "artist_name": "Guns N Petals",
-                "start_time": "2019-05-21T21:30:00.000Z",
-            },
-            {
-                "venue_name": "Park Square Live Music & Coffee",
-                "artist_name": "Matt Quevedo",
-                "start_time": "2019-06-15T23:00:00.000Z",
-            },
-            {
-                "venue_name": "Park Square Live Music & Coffee",
-                "artist_name": "The Wild Sax Band",
-                "start_time": "2035-04-01T20:00:00.000Z",
-            },
-            {
-                "venue_name": "Park Square Live Music & Coffee",
-                "artist_name": "The Wild Sax Band",
-                "start_time": "2035-04-08T20:00:00.000Z",
-            },
-            {
-                "venue_name": "Park Square Live Music & Coffee",
-                "artist_name": "The Wild Sax Band",
-                "start_time": "2035-04-15T20:00:00.000Z",
-            },
-        ]
+        if db.session.query(Show).count() == 0:
+            print("")
+            print("*" * 80)
+            print("Database contains no Shows - loading seed data . . .")
+            print("*" * 80)
+            seed_show_data = [
+                {
+                    "venue_name": "The Musical Hop",
+                    "artist_name": "Guns N Petals",
+                    "start_time": "2019-05-21T21:30:00.000Z",
+                },
+                {
+                    "venue_name": "Park Square Live Music & Coffee",
+                    "artist_name": "Matt Quevedo",
+                    "start_time": "2019-06-15T23:00:00.000Z",
+                },
+                {
+                    "venue_name": "Park Square Live Music & Coffee",
+                    "artist_name": "The Wild Sax Band",
+                    "start_time": "2035-04-01T20:00:00.000Z",
+                },
+                {
+                    "venue_name": "Park Square Live Music & Coffee",
+                    "artist_name": "The Wild Sax Band",
+                    "start_time": "2035-04-08T20:00:00.000Z",
+                },
+                {
+                    "venue_name": "Park Square Live Music & Coffee",
+                    "artist_name": "The Wild Sax Band",
+                    "start_time": "2035-04-15T20:00:00.000Z",
+                },
+            ]
 
-        for next_show_data in seed_show_data:
-            artist = Artist.query.filter_by(name=next_show_data["artist_name"]).first()
-            venue = Venue.query.filter_by(name=next_show_data["venue_name"]).first()
-            newShow = Show()
-            newShow.artist_id = artist.id
-            newShow.venue_id = venue.id
-            newShow.start_time = dateutil.parser.parse(next_show_data["start_time"])
-            db.session.add(newShow)
-            db.session.commit()
+            for next_show_data in seed_show_data:
+                artist = Artist.query.filter_by(name=next_show_data["artist_name"]).first()
+                venue = Venue.query.filter_by(name=next_show_data["venue_name"]).first()
+                newShow = Show()
+                newShow.artist_id = artist.id
+                newShow.venue_id = venue.id
+                newShow.start_time = dateutil.parser.parse(next_show_data["start_time"])
+                db.session.add(newShow)
+                db.session.commit()
+
 
 if not app.debug:
     file_handler = FileHandler("error.log")
@@ -762,6 +773,7 @@ if not app.debug:
 
 # Default port:
 if __name__ == "__main__":
+    load_seed_data_if_needed()
     app.run()
 
 # Or specify port manually:
