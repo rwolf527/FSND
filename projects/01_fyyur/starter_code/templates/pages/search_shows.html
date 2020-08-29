@@ -1,0 +1,46 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Fyyur | Shows Search{% endblock %}
+{% block content %}
+<section>
+    <h2 class="monospace">{{ results.upcoming_shows_count }} Upcoming
+        {% if results.upcoming_shows_count == 1 %}Show{% else %}Shows{% endif %}
+        with Artists or Venues that match "{{ search_term }}"
+    </h2>
+    <div class="row">
+        {%for show in results.upcoming_shows %}
+        <div class="col-sm-4">
+            <div class="tile tile-show">
+                <img src="{{ show.artist_image_link }}"
+                     alt="Artist Image" />
+                <h4>{{ show.start_time|datetime('full') }}</h4>
+                <h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
+                <p>playing at</p>
+                <h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2 class="monospace">{{ results.past_shows_count }} Past
+        {% if results.past_shows_count == 1 %}Show{% else %}Shows{% endif %}
+        with Artists or Venues that match "{{ search_term }}"
+    </h2>
+    <div class="row">
+        {%for show in results.past_shows %}
+        <div class="col-sm-4">
+            <div class="tile tile-show">
+                <img src="{{ show.artist_image_link }}"
+                     alt="Artist Image" />
+                <h4>{{ show.start_time|datetime('full') }}</h4>
+                <h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
+                <p>played at</p>
+                <h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
